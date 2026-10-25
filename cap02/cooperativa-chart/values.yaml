@@ -1,0 +1,25 @@
+nameOverride: panel
+
+replicaCount: 1
+
+appEnv: pruebas
+
+image:
+  registry: quay.io
+  repository: ricardo_instructor_formacion/cooperativa-web
+  tag: web-1.0
+  pullPolicy: IfNotPresent
+
+service:
+  port: 8080
+
+route:
+  enabled: true
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 32Mi
+  limits:
+    cpu: 200m
+    memory: 96Mi

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cooperativa-web
+  labels:
+    app: cooperativa-web
+    app.kubernetes.io/part-of: cooperativa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cooperativa-web
+  template:
+    metadata:
+      labels:
+        app: cooperativa-web
+        app.kubernetes.io/part-of: cooperativa
+    spec:
+      containers:
+        - name: web
+          image: quay.io/ricardo_instructor_formacion/cooperativa-web:web-1.0
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: APP_ENV
+              value: base
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              cpu: 200m
+              memory: 96Mi

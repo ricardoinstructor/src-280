@@ -1,0 +1,9 @@
+replicaCount: 1
+
+appEnv: desarrollo
+
+image:
+  tag: web-1.0
+
+route:
+  enabled: true

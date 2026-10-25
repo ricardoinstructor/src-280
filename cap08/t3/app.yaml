@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: autoescala
+  namespace: curso-t3
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: deploy-scaler
+  namespace: curso-t3
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments/scale"]
+    verbs: ["get", "patch", "update"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: autoescala
+  namespace: curso-t3
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: deploy-scaler
+subjects:
+  - kind: ServiceAccount
+    name: autoescala
+    namespace: curso-t3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: panel
+  namespace: curso-t3
+  labels: {app: panel}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: panel}
+  template:
+    metadata:
+      labels: {app: panel}
+    spec:
+      containers:
+        - name: web
+          image: __COOP_IMAGE__
+          ports: [{containerPort: 8080}]
+          readinessProbe:
+            tcpSocket: {port: 8080}
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          resources:
+            requests: {cpu: 50m, memory: 32Mi}
+            limits: {cpu: 200m, memory: 96Mi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: panel
+  namespace: curso-t3
+spec:
+  selector: {app: panel}
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080

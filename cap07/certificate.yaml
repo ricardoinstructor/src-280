@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: cooperativa-selfsigned
+  namespace: curso-t3
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mi-app
+  namespace: curso-t3
+spec:
+  secretName: mi-app-tls
+  dnsNames:
+    - mi-app.curso-t3.svc
+  issuerRef:
+    name: cooperativa-selfsigned
+    kind: Issuer

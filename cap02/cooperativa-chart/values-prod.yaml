@@ -1,0 +1,9 @@
+replicaCount: 3
+
+appEnv: produccion
+
+image:
+  tag: web-1.1
+
+route:
+  enabled: true

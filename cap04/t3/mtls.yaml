@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: seguro
+  namespace: curso-t3
+  annotations:
+    service.beta.openshift.io/serving-cert-secret-name: seguro-tls
+spec:
+  selector: {app: seguro}
+  ports:
+    - name: https
+      port: 8443
+      targetPort: 8443
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seguro
+  namespace: curso-t3
+  labels: {app: seguro}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: seguro}
+  template:
+    metadata:
+      labels: {app: seguro}
+    spec:
+      containers:
+        - name: tls
+          image: __COOP_CLIENT__
+          command: ["openssl","s_server","-accept","8443",
+                    "-cert","/etc/tls/tls.crt","-key","/etc/tls/tls.key",
+                    "-WWW","-quiet"]
+          ports:
+            - containerPort: 8443
+          volumeMounts:
+            - name: cert
+              mountPath: /etc/tls
+              readOnly: true
+      volumes:
+        - name: cert
+          secret: {secretName: seguro-tls}
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mtls-client
+  namespace: curso-t3
+  labels: {app: mtls-client}
+spec:
+  restartPolicy: Never
+  containers:
+    - name: client
+      image: __COOP_CLIENT__
+      command: ["sleep","3600"]
+      volumeMounts:
+        - name: ca
+          mountPath: /etc/ca
+          readOnly: true
+  volumes:
+    - name: ca
+      configMap: {name: ca-bundle}

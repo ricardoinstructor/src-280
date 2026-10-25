@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cooperativa-web
+  labels:
+    app: cooperativa-web
+    app.kubernetes.io/part-of: cooperativa
+spec:
+  selector:
+    app: cooperativa-web
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+      protocol: TCP

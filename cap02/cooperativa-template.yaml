@@ -1,0 +1,84 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: cooperativa-panel
+  annotations:
+    description: Panel web de la cooperativa, parametrizable por entorno.
+parameters:
+  - name: APP_NAME
+    description: Nombre base de los recursos.
+    required: true
+  - name: APP_ENV
+    description: Entorno lógico de la aplicación.
+    value: pruebas
+  - name: REPLICAS
+    description: Número de réplicas.
+    value: "1"
+  - name: IMAGE_REPO
+    description: Repositorio completo de la imagen (sin tag).
+    value: quay.io/ricardo_instructor_formacion/cooperativa-web
+  - name: IMAGE_TAG
+    description: Etiqueta de la imagen.
+    value: web-1.0
+objects:
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: ${APP_NAME}
+      labels:
+        app: ${APP_NAME}
+    spec:
+      replicas: ${{REPLICAS}}
+      selector:
+        matchLabels:
+          app: ${APP_NAME}
+      template:
+        metadata:
+          labels:
+            app: ${APP_NAME}
+        spec:
+          containers:
+            - name: web
+              image: ${IMAGE_REPO}:${IMAGE_TAG}
+              ports:
+                - containerPort: 8080
+              env:
+                - name: APP_ENV
+                  value: ${APP_ENV}
+              readinessProbe:
+                tcpSocket:
+                  port: 8080
+                initialDelaySeconds: 3
+                periodSeconds: 5
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 32Mi
+                limits:
+                  cpu: 200m
+                  memory: 96Mi
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: ${APP_NAME}
+      labels:
+        app: ${APP_NAME}
+    spec:
+      selector:
+        app: ${APP_NAME}
+      ports:
+        - name: http
+          port: 8080
+          targetPort: 8080
+  - apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      name: ${APP_NAME}
+      labels:
+        app: ${APP_NAME}
+    spec:
+      to:
+        kind: Service
+        name: ${APP_NAME}
+      port:
+        targetPort: http

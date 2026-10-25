@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: legacy
+  namespace: curso-t1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: legacy-app
+  namespace: curso-t1
+  labels: {app: legacy-app}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: legacy-app}
+  template:
+    metadata:
+      labels: {app: legacy-app}
+    spec:
+      serviceAccountName: legacy
+      containers:
+        - name: legacy
+          image: __COOP_ROOTCHECK__
+          securityContext:
+            runAsUser: 0

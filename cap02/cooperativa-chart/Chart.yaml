@@ -1,0 +1,6 @@
+apiVersion: v2
+name: cooperativa-chart
+description: Panel web de la cooperativa (DO280 - cap. 2)
+type: application
+version: 0.1.0
+appVersion: "1.0"

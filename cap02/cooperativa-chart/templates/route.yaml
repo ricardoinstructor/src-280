@@ -1,0 +1,14 @@
+{{- if .Values.route.enabled }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "cooperativa.fullname" . }}
+  labels:
+    {{- include "cooperativa.labels" . | nindent 4 }}
+spec:
+  to:
+    kind: Service
+    name: {{ include "cooperativa.fullname" . }}
+  port:
+    targetPort: http
+{{- end }}

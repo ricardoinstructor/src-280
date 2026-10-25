@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: privileged-test
+  namespace: curso-t2
+  labels: {app: privileged-test}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: privileged-test}
+  template:
+    metadata:
+      labels: {app: privileged-test}
+    spec:
+      serviceAccountName: app-t2
+      containers:
+        - name: test
+          image: __COOP_CLIENT__
+          command: ["sleep", "60"]
+          securityContext:
+            privileged: true

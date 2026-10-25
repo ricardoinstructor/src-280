@@ -1,0 +1,5 @@
+# Copia el patch como patch-env.yaml dentro del overlay y añade este bloque
+# a su kustomization.yaml. Kustomize no permite cargar ficheros fuera del
+# directorio raíz del overlay sin desactivar el load restrictor.
+patches:
+  - path: patch-env.yaml

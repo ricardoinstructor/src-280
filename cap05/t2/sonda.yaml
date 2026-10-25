@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: curso-t2-sonda
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sonda
+  namespace: curso-t2-sonda
+  labels: {app: sonda}
+spec:
+  restartPolicy: Never
+  containers:
+    - name: client
+      image: __COOP_CLIENT__
+      command: ["sleep", "3600"]
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities: {drop: ["ALL"]}
+        runAsNonRoot: true
+        seccompProfile: {type: RuntimeDefault}

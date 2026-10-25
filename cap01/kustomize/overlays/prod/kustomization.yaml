@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+labels:
+  - pairs:
+      entorno: produccion
+    includeSelectors: false
+replicas:
+  - name: cooperativa-web
+    count: 3
+images:
+  - name: quay.io/ricardo_instructor_formacion/cooperativa-web
+    newTag: web-1.1
+patches:
+  - path: patch-env.yaml

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tcp-panel
+  labels: {app: tcp-panel}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: tcp-panel}
+  template:
+    metadata:
+      labels: {app: tcp-panel}
+    spec:
+      containers:
+        - name: tcp
+          image: __COOP_TCP__
+          ports:
+            - containerPort: 2023
+          resources:
+            requests: {cpu: 50m, memory: 32Mi}
+            limits: {cpu: 200m, memory: 96Mi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tcp-panel
+  labels: {app: tcp-panel}
+spec:
+  type: LoadBalancer
+  selector: {app: tcp-panel}
+  ports:
+    - name: tcp
+      port: 2023
+      targetPort: 2023
+      protocol: TCP

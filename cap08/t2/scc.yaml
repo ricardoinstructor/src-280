@@ -1,0 +1,41 @@
+apiVersion: security.openshift.io/v1
+kind: SecurityContextConstraints
+metadata:
+  name: t2-scc
+allowPrivilegeEscalation: false
+allowPrivilegedContainer: false
+runAsUser:
+  type: MustRunAsRange
+seLinuxContext:
+  type: MustRunAs
+fsGroup:
+  type: MustRunAs
+supplementalGroups:
+  type: MustRunAs
+volumes: ["configMap", "secret", "emptyDir", "persistentVolumeClaim"]
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: app-t2
+  namespace: curso-t2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-t2
+  namespace: curso-t2
+  labels: {app: app-t2}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: app-t2}
+  template:
+    metadata:
+      labels: {app: app-t2}
+    spec:
+      serviceAccountName: app-t2
+      containers:
+        - name: app
+          image: __COOP_CLIENT__
+          command: ["sleep", "3600"]

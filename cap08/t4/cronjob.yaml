@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: poke-panel
+  namespace: curso-t3
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: poke
+              image: __COOP_CLIENT__
+              command: ["sh", "-c", "curl -s -o /dev/null -w '%{http_code}\\n' http://panel:8080/"]
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities: {drop: ["ALL"]}
+                runAsNonRoot: true
+                seccompProfile: {type: RuntimeDefault}
