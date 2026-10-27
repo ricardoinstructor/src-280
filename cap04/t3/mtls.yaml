@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: tls
-          image: __COOP_CLIENT__
+          image: quay.io/ricardo_instructor_formacion/cooperativa-web:client-1.0
           command: ["openssl","s_server","-accept","8443",
                     "-cert","/etc/tls/tls.crt","-key","/etc/tls/tls.key",
                     "-WWW","-quiet"]
@@ -52,7 +52,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: client
-      image: __COOP_CLIENT__
+      image: quay.io/ricardo_instructor_formacion/cooperativa-web:client-1.0
       command: ["sleep","3600"]
       volumeMounts:
         - name: ca

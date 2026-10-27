@@ -8,7 +8,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: client
-      image: __COOP_CLIENT__
+      image: quay.io/ricardo_instructor_formacion/cooperativa-web:client-1.0
       command: ["sleep", "3600"]
       securityContext:
         allowPrivilegeEscalation: false

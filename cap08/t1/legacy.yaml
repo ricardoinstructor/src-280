@@ -21,6 +21,6 @@ spec:
       serviceAccountName: legacy
       containers:
         - name: legacy
-          image: __COOP_ROOTCHECK__
+          image: quay.io/ricardo_instructor_formacion/cooperativa-web:rootcheck-1.0
           securityContext:
             runAsUser: 0

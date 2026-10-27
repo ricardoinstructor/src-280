@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: tcp
-          image: __COOP_TCP__
+          image: quay.io/ricardo_instructor_formacion/cooperativa-web:tcp-1.0
           ports:
             - containerPort: 2023
           resources:

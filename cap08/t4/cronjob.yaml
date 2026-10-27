@@ -16,7 +16,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: poke
-              image: __COOP_CLIENT__
+              image: quay.io/ricardo_instructor_formacion/cooperativa-web:client-1.0
               command: ["sh", "-c", "curl -s -o /dev/null -w '%{http_code}\\n' http://panel:8080/"]
               securityContext:
                 allowPrivilegeEscalation: false

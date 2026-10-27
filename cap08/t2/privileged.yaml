@@ -15,7 +15,7 @@ spec:
       serviceAccountName: app-t2
       containers:
         - name: test
-          image: __COOP_CLIENT__
+          image: quay.io/ricardo_instructor_formacion/cooperativa-web:client-1.0
           command: ["sleep", "60"]
           securityContext:
             privileged: true

@@ -11,7 +11,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: scale-up
-          image: __COOP_JOB__
+          image: quay.io/ricardo_instructor_formacion/cooperativa-web:job-1.0
           env:
             - {name: NAMESPACE, value: curso-t3}
             - {name: DEPLOYMENT, value: panel}
